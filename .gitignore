@@ -1,0 +1,7 @@
+.DS_store
+target/
+.idea
+com/
+vivawallet-api.iml
+pom.xml.releaseBackup
+release.properties
