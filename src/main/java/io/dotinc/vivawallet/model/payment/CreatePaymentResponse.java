@@ -34,4 +34,12 @@ public class CreatePaymentResponse {
      */
     String errorText;
 
+    String statusId;
+
+    String transactionId;
+
+    Integer eventId;
+
+    Boolean success;
+
 }

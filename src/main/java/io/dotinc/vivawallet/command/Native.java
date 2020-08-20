@@ -10,7 +10,7 @@ import java.io.IOException;
 public interface Native extends Command {
     String apiBase = "https://demo-api.vivapayments.com";
 
-    <T> T execute(String key) throws IOException, VivaWalletException;
+    <T> T execute(String bearerToken) throws IOException, VivaWalletException;
 
     default String path(String path, Object ... args){
         return String.format("%s%s", apiBase, String.format(path, args));

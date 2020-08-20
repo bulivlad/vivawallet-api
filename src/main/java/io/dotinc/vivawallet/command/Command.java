@@ -5,11 +5,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import io.dotinc.vivawallet.MinimalistClient;
 import io.dotinc.vivawallet.exception.VivaWalletException;
+import io.dotinc.vivawallet.model.auth.BasicAuth;
 import io.dotinc.vivawallet.model.auth.BearerTokenRequest;
 import io.dotinc.vivawallet.model.auth.BearerTokenResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 /**
@@ -29,6 +31,10 @@ public interface Command {
     default String authHeaderFromToken(BearerTokenRequest bearerTokenRequest) throws IOException, VivaWalletException {
         BearerTokenResponse response = MinimalistClient.authorize(BearerTokenResponse.class, "POST", "https://demo-accounts.vivapayments.com/connect/token", bearerTokenRequest);
         return "Bearer " + response.getAccess_token();
+    }
+
+    default String authHeaderFromApiKey(BasicAuth basicAuth) {
+        return "Basic " + new String(Base64.getEncoder().encode((basicAuth.getMerchantId() + ":" + basicAuth.getApiKey()).getBytes()));
     }
 
 }
