@@ -16,7 +16,6 @@ import java.util.List;
  * @author vbulimac on 20/08/2020.
  */
 public interface Command {
-    String apiBase = "https://demo.vivapayments.com/api/orders";
 
     default<T> List<T> jsonArrayToTypedList(Class<T> cls, JsonArray arr){
         Gson g = new Gson();
@@ -28,11 +27,8 @@ public interface Command {
     }
 
     default String authHeaderFromToken(BearerTokenRequest bearerTokenRequest) throws IOException, VivaWalletException {
-        BearerTokenResponse response = MinimalistClient.authorize(BearerTokenResponse.class, "POST", "/connect/token", bearerTokenRequest);
+        BearerTokenResponse response = MinimalistClient.authorize(BearerTokenResponse.class, "POST", "https://demo-accounts.vivapayments.com/connect/token", bearerTokenRequest);
         return "Bearer " + response.getAccess_token();
     }
 
-    default String path(String path, Object ... args){
-        return String.format("%s%s", apiBase, String.format(path, args));
-    }
 }

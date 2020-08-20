@@ -24,6 +24,6 @@ public class CancelPayment implements Payment {
     CancelPaymentRequest cancelPaymentRequest;
 
     public CancelPaymentResponse execute(String key) throws IOException, VivaWalletException {
-        return MinimalistClient.call(CancelPaymentResponse.class, "DELETE", path("/api/orders/%s"), cancelPaymentRequest, key);
+        return MinimalistClient.call(CancelPaymentResponse.class, "DELETE", path("/api/orders/%s", cancelPaymentRequest.getOrderCode()), cancelPaymentRequest, key);
     }
 }

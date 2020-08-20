@@ -7,8 +7,8 @@ import java.io.IOException;
 /**
  * @author vbulimac on 20/08/2020.
  */
-public interface Order extends Command{
-    String apiBase = "https://demo.vivapayments.com/api/orders";
+public interface Native extends Command {
+    String apiBase = "https://demo-api.vivapayments.com";
 
     <T> T execute(String key) throws IOException, VivaWalletException;
 

@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
  */
 
 @Data
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,5 +34,7 @@ public class UpdateOrderRequest {
      * Changes the cancelled status of the order.
      */
     Boolean isCanceled;
+
+    Integer orderCode;
 
 }

@@ -1,4 +1,4 @@
-package io.dotinc.vivawallet.model.auth;
+package io.dotinc.vivawallet.model.checkout;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,12 +8,10 @@ import lombok.experimental.FieldDefaults;
  */
 
 @Data
-@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class BearerTokenRequest {
-    String clientId;
-    String clientSecret;
+public class NativeTransactionResponse {
+    String transactionId;
 }

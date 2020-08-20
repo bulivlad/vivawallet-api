@@ -8,12 +8,10 @@ import io.dotinc.vivawallet.exception.VivaWalletUnauthorizedException;
 import io.dotinc.vivawallet.model.auth.BearerTokenRequest;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
 import java.util.Base64;
+import java.util.UUID;
 
 /**
  * @author vbulimac on 20/08/2020.
@@ -70,18 +68,20 @@ public class MinimalistClient {
 
     public static <T> T authorize(Class<T> cls, String method, String url, BearerTokenRequest data) throws IOException, VivaWalletException {
         String basicKey = "Basic " + new String(Base64.getEncoder().encode((data.getClientId() + ":" + data.getClientSecret()).getBytes()));
+        String boundary = UUID.randomUUID().toString();
         URL obj = new URL(url);
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
         con.setRequestMethod(method);
-        con.setRequestProperty("Content-Type", "multipart/form-data");
+        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
         con.setRequestProperty("Authorization", basicKey);
 
 
         String payload = "grant_type=client_credentials";
         con.setDoOutput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(payload);
+        PrintWriter wr = new PrintWriter(con.getOutputStream());
+        wr.append("--" + boundary).append("\r\n");
+        wr.append("Content-Disposition: form-data; grant_type=client_credentials").append("\r\n");
         wr.flush();
         wr.close();
 

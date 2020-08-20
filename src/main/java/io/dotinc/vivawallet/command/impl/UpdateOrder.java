@@ -23,6 +23,6 @@ public class UpdateOrder implements Order {
     UpdateOrderRequest updateOrderRequest;
 
     public Void execute(String key) throws IOException, VivaWalletException {
-        return MinimalistClient.call(Void.class, "PATCH", path("/api/orders/%s"), updateOrderRequest, key);
+        return MinimalistClient.call(Void.class, "PATCH", path("/api/orders/%s", updateOrderRequest.getOrderCode()), updateOrderRequest, key);
     }
 }

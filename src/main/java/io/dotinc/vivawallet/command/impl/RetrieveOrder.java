@@ -22,6 +22,6 @@ public class RetrieveOrder implements Order {
     RetrieveOrderRequest retrieveOrderRequest;
 
     public RetrieveOrderResponse execute(String key) throws IOException, VivaWalletException {
-        return MinimalistClient.call(RetrieveOrderResponse.class, "GET", path("/api/orders/%s"), retrieveOrderRequest, key);
+        return MinimalistClient.call(RetrieveOrderResponse.class, "GET", path("/api/orders/%s", retrieveOrderRequest.getOrderCode()), retrieveOrderRequest, key);
     }
 }
