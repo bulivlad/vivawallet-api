@@ -6,12 +6,10 @@ import io.dotinc.vivawallet.exception.VivaWalletForbiddenException;
 import io.dotinc.vivawallet.exception.VivaWalletServerException;
 import io.dotinc.vivawallet.exception.VivaWalletUnauthorizedException;
 import io.dotinc.vivawallet.model.auth.BearerTokenRequest;
+import okhttp3.*;
 
-import javax.net.ssl.HttpsURLConnection;
-import java.io.*;
-import java.net.URL;
+import java.io.IOException;
 import java.util.Base64;
-import java.util.UUID;
 
 /**
  * @author vbulimac on 20/08/2020.
@@ -19,98 +17,74 @@ import java.util.UUID;
 public class MinimalistClient {
     public static <T, D> T call(Class<T> cls, String method, String url, D data, String base64EncodedApiKey) throws IOException, VivaWalletException {
         Gson gson = new Gson();
-        URL obj = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
-        con.setRequestMethod(method);
-        con.setRequestProperty("Content-Type", "application/json");
-        if(base64EncodedApiKey != null){
-            con.setRequestProperty("authorization", base64EncodedApiKey);
-        }
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder requestBuilder = new Request.Builder()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", base64EncodedApiKey)
+                .url(url);
 
         if(data != null){
-            String payload = gson.toJson(data);
-            con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(payload);
-            wr.flush();
-            wr.close();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), gson.toJson(data));
+            requestBuilder.method(method, requestBody);
+        } else {
+            requestBuilder.method(method, null);
         }
 
-        int responseCode = con.getResponseCode();
+        Response response = client.newCall(requestBuilder.build()).execute();
+
+        int responseCode = response.code();
+        String body = response.body().string();
         if(responseCode >= 400 && responseCode <= 500){
             if(responseCode == 401){
-                throw new VivaWalletUnauthorizedException(con.getResponseMessage(), responseCode);
+                throw new VivaWalletUnauthorizedException(body, responseCode);
             }
             if(responseCode == 403){
-                throw new VivaWalletForbiddenException(con.getResponseMessage(), responseCode);
+                throw new VivaWalletForbiddenException(body, responseCode);
             }
-            throw new VivaWalletException(con.getResponseMessage(), responseCode);
+            throw new VivaWalletException(body, responseCode);
         }
         if(responseCode >= 500){
-            throw new VivaWalletServerException(con.getResponseMessage(), responseCode);
+            throw new VivaWalletServerException(body, responseCode);
         }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        if(cls.equals(Void.class)){
-            return null;
-        }
-
-        return new Gson().fromJson(response.toString(), cls);
+        return new Gson().fromJson(body, cls);
     }
 
     public static <T> T authorize(Class<T> cls, String method, String url, BearerTokenRequest data) throws IOException, VivaWalletException {
         String basicKey = "Basic " + new String(Base64.getEncoder().encode((data.getClientId() + ":" + data.getClientSecret()).getBytes()));
-        String boundary = UUID.randomUUID().toString();
-        URL obj = new URL(url);
-        HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
-        con.setRequestMethod(method);
-        con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-        con.setRequestProperty("Authorization", basicKey);
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("grant_type", "client_credentials")
+                .build();
+        Request request = new Request.Builder()
+                .url("https://demo-accounts.vivapayments.com/connect/token")
+                .method("POST", body)
+                .addHeader("Authorization", basicKey)
+                .addHeader("Accept", "application/json")
+                .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                .build();
+
+        Response response = client.newCall(request).execute();
 
 
-        String payload = "grant_type=client_credentials";
-        con.setDoOutput(true);
-        PrintWriter wr = new PrintWriter(con.getOutputStream());
-        wr.append("--" + boundary).append("\r\n");
-        wr.append("Content-Disposition: form-data; grant_type=client_credentials").append("\r\n");
-        wr.flush();
-        wr.close();
-
-        int responseCode = con.getResponseCode();
+        int responseCode = response.code();
+        String responseBody = response.body().string();
         if(responseCode >= 400 && responseCode <= 500){
             if(responseCode == 401){
-                throw new VivaWalletUnauthorizedException(con.getResponseMessage(), responseCode);
+                throw new VivaWalletUnauthorizedException(responseBody, responseCode);
             }
             if(responseCode == 403){
-                throw new VivaWalletForbiddenException(con.getResponseMessage(), responseCode);
+                throw new VivaWalletForbiddenException(responseBody, responseCode);
             }
-            throw new VivaWalletException(con.getResponseMessage(), responseCode);
+            throw new VivaWalletException(responseBody, responseCode);
         }
         if(responseCode >= 500){
-            throw new VivaWalletServerException(con.getResponseMessage(), responseCode);
+            throw new VivaWalletServerException(responseBody, responseCode);
         }
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-        if(cls.equals(Void.class)){
-            return null;
-        }
-
-        return new Gson().fromJson(response.toString(), cls);
+        return new Gson().fromJson(responseBody, cls);
     }
 }
