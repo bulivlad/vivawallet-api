@@ -22,7 +22,7 @@ public class CreditCard {
     /**
      * A descriptive name of the bank that issued the card.
      */
-    String cardIssuingBank;
+    String issuingBank;
 
     /**
      * The type of the card.
@@ -43,5 +43,10 @@ public class CreditCard {
      * The token that is generated based on the details of the card.
      */
     String token;
+
+    /**
+     * The card expiration date in format yyyy-MM-dd'T'hh:mm:ss
+     */
+    String expirationDate;
 
 }
