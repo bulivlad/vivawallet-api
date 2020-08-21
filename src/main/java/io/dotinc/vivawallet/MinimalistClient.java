@@ -12,6 +12,7 @@ import okhttp3.*;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.HashMap;
 
 /**
  * @author vbulimac on 20/08/2020.
@@ -51,7 +52,7 @@ public class MinimalistClient {
         }
 
         T responseBody = new Gson().fromJson(body, cls);
-        if(responseBody == null) {
+        if(responseBody == null || new Gson().fromJson(body, HashMap.class).keySet().stream().allMatch(e -> Character.isUpperCase(e.toString().charAt(0)))) {
             return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create().fromJson(body, cls);
         }
 
