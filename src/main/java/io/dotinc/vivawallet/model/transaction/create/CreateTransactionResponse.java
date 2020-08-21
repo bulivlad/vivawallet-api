@@ -48,4 +48,6 @@ public class CreateTransactionResponse {
      */
     String transactionId;
 
+    Boolean success;
+
 }
