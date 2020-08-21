@@ -3,6 +3,8 @@ package io.dotinc.vivawallet.model.transaction.retrieve;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 /**
  * @author vbulimac on 21/08/2020.
  */
@@ -44,6 +46,6 @@ public class Order {
     /**
      * List of tags used for internal tracking and report purposes.
      */
-    String tags;
+    List<String> tags;
 
 }

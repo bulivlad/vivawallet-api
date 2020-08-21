@@ -26,7 +26,11 @@ public class CancelTransaction implements Transaction {
 
     @Override
     public CancelTransactionResponse execute(String apiKeyBase64, TransactionAction transactionAction) throws IOException, VivaWalletException {
-        String path = path("/api/transactions/%s?amount=%s&sourceCode=%s");
-        return MinimalistClient.call(CancelTransactionResponse.class, "DELETE", path, cancelTransactionRequest, apiKeyBase64);
+        String path = path("/api/transactions/%s?amount=%s", cancelTransactionRequest.getTransactionId(), cancelTransactionRequest.getAmount());
+        if (cancelTransactionRequest.getSourceCode() != null && cancelTransactionRequest.getSourceCode() != "") {
+            path = path("/api/transactions/%s?amount=%s&sourceCode=%s", cancelTransactionRequest.getTransactionId(), cancelTransactionRequest.getAmount(), cancelTransactionRequest.getSourceCode());
+        }
+
+        return MinimalistClient.call(CancelTransactionResponse.class, "DELETE", path, null, apiKeyBase64);
     }
 }
