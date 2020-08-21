@@ -48,4 +48,6 @@ public class CancelTransactionResponse {
      */
     String transactionId;
 
+    Boolean success;
+
 }
