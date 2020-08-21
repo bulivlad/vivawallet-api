@@ -1,6 +1,8 @@
 package io.dotinc.vivawallet;
 
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.dotinc.vivawallet.exception.VivaWalletException;
 import io.dotinc.vivawallet.exception.VivaWalletForbiddenException;
 import io.dotinc.vivawallet.exception.VivaWalletServerException;
@@ -48,7 +50,12 @@ public class MinimalistClient {
             throw new VivaWalletServerException(body, responseCode);
         }
 
-        return new Gson().fromJson(body, cls);
+        T responseBody = new Gson().fromJson(body, cls);
+        if(responseBody == null) {
+            return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create().fromJson(body, cls);
+        }
+
+        return responseBody;
     }
 
     public static <T> T authorize(Class<T> cls, String method, String url, BearerTokenRequest data) throws IOException, VivaWalletException {
