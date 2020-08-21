@@ -28,13 +28,4 @@ public interface Command {
         return result;
     }
 
-    default String authHeaderFromToken(BearerTokenRequest bearerTokenRequest) throws IOException, VivaWalletException {
-        BearerTokenResponse response = MinimalistClient.authorize(BearerTokenResponse.class, "POST", "https://demo-accounts.vivapayments.com/connect/token", bearerTokenRequest);
-        return "Bearer " + response.getAccess_token();
-    }
-
-    default String authHeaderFromApiKey(BasicAuth basicAuth) {
-        return "Basic " + new String(Base64.getEncoder().encode((basicAuth.getMerchantId() + ":" + basicAuth.getApiKey()).getBytes()));
-    }
-
 }
