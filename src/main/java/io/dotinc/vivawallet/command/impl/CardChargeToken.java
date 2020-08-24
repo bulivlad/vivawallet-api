@@ -25,6 +25,20 @@ public class CardChargeToken implements Card {
 
     @Override
     public CardChargeTokenResponse execute(String apiKeyBase64) throws IOException, VivaWalletException {
+        switch (cardChargeTokenRequest.getAction()) {
+            case RETRIEVE_CARD_FOR_CHARGE_TOKEN:
+                return retrieveCardToken(apiKeyBase64);
+            case RETRIEVE_CHARGE_TOKEN_FOR_CARD:
+                return retrieveChargeToken(apiKeyBase64);
+        }
+        throw new IllegalArgumentException("Invalid action " + cardChargeTokenRequest.getAction());
+    }
+
+    private CardChargeTokenResponse retrieveCardToken(String apiKeyBase64) throws IOException, VivaWalletException {
+        return MinimalistClient.call(CardChargeTokenResponse.class, "GET", path("/tokens?chargetoken=%s", cardChargeTokenRequest.getChargeToken()), null, apiKeyBase64);
+    }
+
+    private CardChargeTokenResponse retrieveChargeToken(String apiKeyBase64) throws IOException, VivaWalletException {
         return MinimalistClient.call(CardChargeTokenResponse.class, "GET", path("/chargetokens?token=%s", cardChargeTokenRequest.getCardToken()), null, apiKeyBase64);
     }
 

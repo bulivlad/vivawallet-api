@@ -1,5 +1,6 @@
 package io.dotinc.vivawallet.model.card;
 
+import io.dotinc.vivawallet.enums.CardChargeTokenAction;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,5 +17,9 @@ import lombok.experimental.FieldDefaults;
 public class CardChargeTokenRequest {
 
     String cardToken;
+
+    String chargeToken;
+
+    CardChargeTokenAction action;
 
 }

@@ -1,5 +1,6 @@
 package io.dotinc.vivawallet.model.card;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,5 +17,8 @@ import lombok.experimental.FieldDefaults;
 public class CardChargeTokenResponse {
 
     String chargeToken;
+    
+    @SerializedName("token")
+    String cardToken;
 
 }
