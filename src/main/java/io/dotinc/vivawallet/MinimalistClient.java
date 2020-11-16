@@ -68,7 +68,7 @@ public class MinimalistClient {
                 .addFormDataPart("grant_type", "client_credentials")
                 .build();
         Request request = new Request.Builder()
-                .url("https://demo-accounts.vivapayments.com/connect/token")
+                .url("https://accounts.vivapayments.com/connect/token")
                 .method("POST", body)
                 .addHeader("Authorization", basicKey)
                 .addHeader("Accept", "application/json")

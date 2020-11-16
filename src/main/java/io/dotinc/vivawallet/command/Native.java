@@ -11,7 +11,7 @@ import java.io.IOException;
  * @author vbulimac on 20/08/2020.
  */
 public interface Native extends Command {
-    String apiBase = "https://demo-api.vivapayments.com";
+    String apiBase = "https://api.vivapayments.com";
 
     <T> T execute(String bearerToken) throws IOException, VivaWalletException;
 
@@ -20,7 +20,7 @@ public interface Native extends Command {
     }
 
     default String authHeaderFromToken(BearerTokenRequest bearerTokenRequest) throws IOException, VivaWalletException {
-        BearerTokenResponse response = MinimalistClient.authorize(BearerTokenResponse.class, "POST", "https://demo-accounts.vivapayments.com/connect/token", bearerTokenRequest);
+        BearerTokenResponse response = MinimalistClient.authorize(BearerTokenResponse.class, "POST", "https://accounts.vivapayments.com/connect/token", bearerTokenRequest);
         return "Bearer " + response.getAccess_token();
     }
 }

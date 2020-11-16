@@ -10,7 +10,7 @@ import java.util.Base64;
  * @author vbulimac on 20/08/2020.
  */
 public interface Order extends Command{
-    String apiBase = "https://demo.vivapayments.com/api/orders";
+    String apiBase = "https://www.vivapayments.com/api/orders";
 
     <T> T execute(String apiKeyBase64) throws IOException, VivaWalletException;
 

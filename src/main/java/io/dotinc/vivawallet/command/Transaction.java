@@ -11,7 +11,7 @@ import java.util.Base64;
  * @author vbulimac on 21/08/2020.
  */
 public interface Transaction extends Command {
-    String apiBase = "https://demo.vivapayments.com";
+    String apiBase = "https://www.vivapayments.com";
 
     <T> T execute(String apiKeyBase64, TransactionAction transactionAction) throws IOException, VivaWalletException;
 

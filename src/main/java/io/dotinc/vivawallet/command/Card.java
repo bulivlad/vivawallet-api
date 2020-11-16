@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public interface Card extends Command {
 
-    String apiBase = "https://demo-api.vivapayments.com/acquiring/v1/cards";
+    String apiBase = "https://api.vivapayments.com/acquiring/v1/cards";
 
     <T> T execute(String apiKeyBase64) throws IOException, VivaWalletException;
 
