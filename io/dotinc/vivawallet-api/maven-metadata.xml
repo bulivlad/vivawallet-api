@@ -5,9 +5,9 @@
   <versioning>
     <release>1.1.0-LIVE</release>
     <versions>
-      <version>1.1.0-LIVE</version>
       <version>1.1.0</version>
+      <version>1.1.0-LIVE</version>
     </versions>
-    <lastUpdated>20201116210336</lastUpdated>
+    <lastUpdated>20210325080117</lastUpdated>
   </versioning>
 </metadata>
