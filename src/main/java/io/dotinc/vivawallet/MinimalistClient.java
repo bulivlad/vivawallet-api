@@ -63,10 +63,11 @@ public class MinimalistClient {
         String basicKey = "Basic " + new String(Base64.getEncoder().encode((data.getClientId() + ":" + data.getClientSecret()).getBytes()));
 
         OkHttpClient client = new OkHttpClient();
-        RequestBody body = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("grant_type", "client_credentials")
-                .build();
+        RequestBody body = new FormBody.Builder().add("grant_type", "client_credentials").build();
+//        RequestBody body = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("grant_type", "client_credentials")
+//                .build();
         Request request = new Request.Builder()
                 .url("https://accounts.vivapayments.com/connect/token")
                 .method("POST", body)
